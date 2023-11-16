@@ -1,5 +1,6 @@
 <?php
-
+# 1027 fix : category,book_type,type 在更新時沒有顯示的問題、按不到按鈕的問題
+# 1027 fix : 庫存量需大於0
 include 'config.php';
 
 session_start();
@@ -67,7 +68,8 @@ if(isset($_POST['update_product'])){
    $update_inventory = $_POST['update_inventory'];
  
 
-   mysqli_query($conn, "UPDATE `products` SET name = '$update_name', price = '$update_price', author='$update_author', edition='$update_edition', type='$update_type', category='$update_category', inventory='$update_inventory' WHERE id = '$update_p_id'") or die('query failed');
+   mysqli_query($conn, "UPDATE `products` SET name = '$update_name', price = '$update_price', author='$update_author', edition='$update_edition', type='$update_type', 
+   category='$update_category', book_type='$update_book_type',inventory='$update_inventory' WHERE id = '$update_p_id'") or die('query failed');
 
    $update_image = $_FILES['update_image']['name'];
    $update_image_tmp_name = $_FILES['update_image']['tmp_name'];
@@ -116,6 +118,7 @@ if(isset($_POST['update_product'])){
 
    <h1 class="title">書籍總覽</h1>
 
+   <!-- 新增商品  -->
    <form action="" method="post" enctype="multipart/form-data">
       <h3>新增商品</h3>
       <input type="text" name="name" class="box" placeholder="輸入產品名稱" required>
@@ -143,7 +146,7 @@ if(isset($_POST['update_product'])){
       <option value="飲食與健康">飲食與健康</option>
       <option value="旅遊">旅遊</option>
       </select>
-      <input type="text" name="inventory" class="box" placeholder="輸入庫存數(僅輸入數字)" required>
+      <input type="number" name="inventory" class="box" placeholder="輸入庫存數(僅輸入數字)" min="1" required>
       <input type="file" name="image" accept="image/jpg, image/jpeg, image/png" class="box" required>
       <input type="submit" value="新增書籍!" name="add_product" class="btn">
    
@@ -172,7 +175,7 @@ if(isset($_POST['update_product'])){
          <div class="price">$<?php echo $fetch_products['price']; ?></div>
          <div class="author">作者: <?php echo $fetch_products['author']; ?></div>
          <div class="edition">版本: <?php echo $fetch_products['edition']; ?></div>
-         <div class="type">書籍版本: <?php echo $fetch_products['book_type']; ?></div>
+         <div class="book_type">書籍版本: <?php echo $fetch_products['book_type']; ?></div>
          <div class="type">閱讀類型: <?php echo $fetch_products['type']; ?></div>
          <div class="category">書本種類: <?php echo $fetch_products['category']; ?></div>
          <div class="inventory">庫存量: <?php echo $fetch_products['inventory']; ?></div>
@@ -199,39 +202,49 @@ if(isset($_POST['update_product'])){
          if(mysqli_num_rows($update_query) > 0){
             while($fetch_update = mysqli_fetch_assoc($update_query)){
    ?>
-   <form action="" method="post" enctype="multipart/form-data">
+   <div>
+   <form action="" method="post" enctype="multipart/form-data" style="height:700px;width:45%;margin:auto;overflow:auto;background:#EEEEEE;">
       <input type="hidden" name="update_p_id" value="<?php echo $fetch_update['id']; ?>">
       <input type="hidden" name="update_old_image" value="<?php echo $fetch_update['image']; ?>">
       <input type="text" name="update_name" value="<?php echo $fetch_update['name']; ?>" class="box" required placeholder="輸入書名">
       <input type="number" name="update_price" value="<?php echo $fetch_update['price']; ?>" min="0" class="box" required placeholder="輸入價格">
       <input type="text" name="update_author" value="<?php echo $fetch_update['author']; ?>" class="box" required placeholder="輸入作者">
       <input type="number" name="update_edition" value="<?php echo $fetch_update['edition']; ?>" class="box" required placeholder="輸入版本">
-      <select name="update_book_type" class="box" required>
-      <option value="" disabled selected>書籍版本</option>
-      <option value="精裝版">精裝版</option>
-      <option value="平裝版">平裝版</option>
+
+      <!-- 書籍版本 (book_type)-->
+      <select name="update_book_type" class="box"> 
+      <option value="" disabled selected><?php echo $fetch_update['book_type']; ?></option>
+      <option value="精裝版"<?php echo ($fetch_update['book_type'] == "精裝版") ? "selected" : ""; ?>>精裝版</option>
+      <option value="平裝版"<?php echo ($fetch_update['book_type'] == "平裝版") ? "selected" : ""; ?>>平裝版</option>
       </select>
-      <select name="update_type" class="box" required>
-      <option value="" disabled selected>選擇閱讀類型</option>
-      <option value="實體書">實體書</option>
-      <option value="電子書">電子書</option>
+
+      <!-- 閱讀類型 (type)-->
+      <select name="update_type" class="box" >
+      
+      <option value="實體書" <?php echo ($fetch_update['type'] == "實體書") ? "selected" : ""; ?>>實體書</option>
+      <option value="電子書" <?php echo ($fetch_update['type'] == "電子書") ? "selected" : ""; ?>>電子書</option>
+      
       </select>
-      <select name="update_category" class="box" required>
-      <option value="" disabled selected>選擇書本種類</option>
-      <option value="文學小說">文學小說</option>
-      <option value="語言學習">語言學習</option>
-      <option value="心靈成長">心靈成長</option>
-      <option value="自然科學">自然科學</option>
-      <option value="商業理財">商業理財</option>
-      <option value="教育">教育</option>
-      <option value="飲食與健康">飲食與健康</option>
-      <option value="旅遊">旅遊</option>
+      
+      <!-- 書本種類 (category)-->
+      <select name="update_category" class="box">
+      <option value="" disabled selected><?php echo $fetch_update['category']; ?></option>
+      <option value="文學小說" <?php echo ($fetch_update['category'] == "文學小說") ? "selected" : ""; ?>>文學小說</option>
+      <option value="語言學習" <?php echo ($fetch_update['category'] == "語言學習") ? "selected" : ""; ?>>語言學習</option>
+      <option value="心靈成長" <?php echo ($fetch_update['category'] == "心靈成長") ? "selected" : ""; ?>>心靈成長</option>
+      <option value="自然科學" <?php echo ($fetch_update['category'] == "自然科學") ? "selected" : ""; ?>>自然科學</option>
+      <option value="商業理財" <?php echo ($fetch_update['category'] == "商業理財") ? "selected" : ""; ?>>商業理財</option>
+      <option value="教育" <?php echo ($fetch_update['category'] == "教育") ? "selected" : ""; ?>>教育</option>
+      <option value="飲食與健康" <?php echo ($fetch_update['category'] == "飲食與健康") ? "selected" : ""; ?>>飲食與健康</option>
+      <option value="旅遊" <?php echo ($fetch_update['category'] == "旅遊") ? "selected" : ""; ?>>旅遊</option>
       </select>
+
       <input type="text" name="update_inventory" value="<?php echo $fetch_update['inventory']; ?>" class="box" required placeholder="輸入庫存">
       <input type="file" class="box" name="update_image" accept="image/jpg, image/jpeg, image/png">
       <input type="submit" value="更新" name="update_product" class="btn">
       <input type="reset" value="取消" id="close-update" class="option-btn">
    </form>
+   </div>
    <?php
          }
       }
