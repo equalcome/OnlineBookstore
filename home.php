@@ -17,17 +17,19 @@ if(isset($_POST['add_to_cart'])){
    $product_author = $_POST['product_author'];
    $product_type = $_POST['product_type'];
    $product_edition = $_POST['product_edition'];
-   $product_inventory = $_POST['product_inventory'];
+   #$product_inventory = $_POST['product_inventory'];
    $product_image = $_POST['product_image'];
    $product_quantity = $_POST['product_quantity'];
    $inventory = mysqli_query($conn, "SELECT inventory FROM products where name='$product_name'") or die('query failed');
    $check_cart_numbers = mysqli_query($conn, "SELECT * FROM `cart` WHERE name = '$product_name' AND user_id = '$user_id'") or die('query failed');
 
    if(mysqli_num_rows($check_cart_numbers) > 0){
-      $message[] = 'already added to cart!';
+      #$message[] = 'already added to cart!';
+      echo '<script>alert("已經在購物車中")</script>';
    }else{
       mysqli_query($conn, "INSERT INTO `cart`(user_id, name, price, quantity, image) VALUES('$user_id', '$product_name', '$product_price', '$product_quantity', '$product_image')") or die('query failed');
-      $message[] = 'product added to cart!';
+      #$message[] = 'product added to cart!';
+      echo '<script>alert("添加成功")</script>';
    }
 
 }
@@ -90,7 +92,7 @@ if(isset($_POST['add_to_cart'])){
       <input type="hidden" name="product_type" value="<?php echo $fetch_products['type']; ?>">
       <input type="hidden" name="product_edition" value="<?php echo $fetch_products['edition']; ?>">
       <input type="hidden" name="product_image" value="<?php echo $fetch_products['image']; ?>">
-      <input type="submit" value="加入購物車" name="加入購物車" class="btn">
+      <input type="submit" value="加入購物車" name="add_to_cart" class="btn">
      </form>
       <?php
          }
