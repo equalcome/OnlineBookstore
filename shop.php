@@ -25,17 +25,21 @@ if(isset($_POST['add_to_cart'])){
    $inventory = mysqli_query($conn, "SELECT inventory FROM products where name='$product_name'") or die('query failed');
    $check_cart_numbers = mysqli_query($conn, "SELECT * FROM cart WHERE name = '$product_name' AND user_id = '$user_id'") or die('query failed');
    if(mysqli_num_rows($check_cart_numbers) > 0){
-      $message[] = '已經在購物車裡了!';
+      #$message[] = '已經在購物車裡了!';
+      echo '<script>alert("已經在購物車裡了")</script>'; 
+      
    }
    else{
       while ($row = $inventory->fetch_assoc()) {
          #echo $row['inventory']."<br>";
          if($product_quantity<=$row['inventory']){
             mysqli_query($conn, "INSERT INTO `cart`(user_id, name, price, quantity, image) VALUES('$user_id', '$product_name', '$product_price', '$product_quantity', '$product_image')") or die('query failed');
-            $message[] = '成功添加至購物車';
+            #$message[] = '成功添加至購物車';
+            echo '<script>alert("成功添加啦!")</script>'; 
          }
          else{
-            $message[] = '庫存不足';
+            #$message[] = '庫存不足';
+            echo '<script>alert("庫存不足")</script>'; 
          }
       }
    }
