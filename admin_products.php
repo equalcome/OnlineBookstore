@@ -29,19 +29,23 @@ if(isset($_POST['add_product'])){
    $select_product_name = mysqli_query($conn, "SELECT name FROM `products` WHERE name = '$name'") or die('query failed');
 
    if(mysqli_num_rows($select_product_name) > 0){
-      $message[] = 'product name already added';
+      #$message[] = 'product name already added';
+      echo '<script>alert("產品已新增!")</script>';
    }else{
       $add_product_query = mysqli_query($conn, "INSERT INTO `products`(name, price, author, edition, type, category,book_type, inventory, image) VALUES('$name', '$price', '$author', '$edition', '$type', '$category' ,'$book_type','$inventory', '$image')") or die('query failed');
       
       if($add_product_query){
          if($image_size > 2000000){
-            $message[] = 'image size is too large';
+            #$message[] = 'image size is too large';
+            echo '<script>alert("圖片尺寸太大了!")</script>';
          }else{
             move_uploaded_file($image_tmp_name, $image_folder);
-            $message[] = 'product added successfully!';
+            #$message[] = 'product added successfully!';
+            echo '<script>alert("圖片新增成功!")</script>';
          }
       }else{
-         $message[] = 'product could not be added!';
+         #$message[] = 'product could not be added!';
+         echo '<script>alert("無法新增???")</script>';
       }
    }
 }
@@ -79,7 +83,8 @@ if(isset($_POST['update_product'])){
 
    if(!empty($update_image)){
       if($update_image_size > 2000000){
-         $message[] = 'image file size is too large';
+         #$message[] = 'image file size is too large';
+         echo '<script>alert("圖片尺寸太大了!")</script>';
       }else{
          mysqli_query($conn, "UPDATE `products` SET image = '$update_image' WHERE id = '$update_p_id'") or die('query failed');
          move_uploaded_file($update_image_tmp_name, $update_folder);
