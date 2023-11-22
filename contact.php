@@ -20,10 +20,13 @@ if(isset($_POST['send'])){
    $select_message = mysqli_query($conn, "SELECT * FROM `message` WHERE name = '$name' AND email = '$email' AND number = '$number' AND message = '$msg'") or die('query failed');
 
    if(mysqli_num_rows($select_message) > 0){
-      $message[] = '已經送出訊息了!';
+      #$message[] = '已經送出訊息了!';
+      echo '<script>alert("已經送出訊息了!")</script>';
+      
    }else{
       mysqli_query($conn, "INSERT INTO `message`(user_id, name, email, number, message) VALUES('$user_id', '$name', '$email', '$number', '$msg')") or die('query failed');
-      $message[] = '訊息送出成功!';
+      #$message[] = '訊息送出成功!';
+      echo '<script>alert("成功送出訊息")</script>';
    }
 
 }
