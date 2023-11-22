@@ -13,13 +13,16 @@ if(isset($_POST['submit'])){
    $select_users = mysqli_query($conn, "SELECT * FROM `users` WHERE email = '$email' AND password = '$pass'") or die('query failed');
 
    if(mysqli_num_rows($select_users) > 0){
-      $message[] = 'user already exist!';
+      #$message[] = 'user already exist!';
+      echo '<script>alert("已經註冊了")</script>';
    }else{
       if($pass != $cpass){
-         $message[] = 'confirm password not matched!';
+         #$message[] = 'confirm password not matched!';
+         echo '<script>alert("密碼錯誤")</script>';
       }else{
          mysqli_query($conn, "INSERT INTO `users`(name, email, password, user_type) VALUES('$name', '$email', '$cpass', '$user_type')") or die('query failed');
-         $message[] = 'registered successfully!';
+         #$message[] = 'registered successfully!';
+         echo '<script>alert("註冊成功")</script>';
          header('location:login.php');
       }
    }
