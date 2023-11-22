@@ -15,7 +15,8 @@ if(isset($_POST['update_users'])){
    $update_name = $_POST['update_name'];
    $update_email = $_POST['update_email'];
    mysqli_query($conn, "UPDATE `users` SET name = '$update_name', email='$update_email' WHERE id = $user_id") or die('updatedie');
-   $message[] = '資料更新';
+   #$message[] = '資料更新';
+   echo '<script>alert("資料更新!")</script>';
 
 }
 
