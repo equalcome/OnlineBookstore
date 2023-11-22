@@ -21,10 +21,12 @@ if(isset($_POST['update_cart'])){
      #echo $cart_quantity;
      if($cart_quantity<=$row['inventory']){
       mysqli_query($conn, "UPDATE `cart` SET quantity = '$cart_quantity' WHERE id = '$cart_id'") or die('query failed');
-      $message[] = '數量已更新!';
+      #$message[] = '數量已更新!';
+      echo '<script>alert("數量已更新!")</script>';
    }
    else {
-      $message[] = '庫存不足';
+      #$message[] = '庫存不足';
+      echo '<script>alert("庫存不足!")</script>';
    }
    }
    
