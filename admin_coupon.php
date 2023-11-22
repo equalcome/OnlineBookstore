@@ -13,7 +13,8 @@ if(isset($_POST['add_coupon'])){
    $amount = $_POST['amount'];
    $select_coupon_name = mysqli_query($conn, "SELECT coupon_id FROM `discount` WHERE coupon_id = '$coupon_id'") or die('query failed');
    if(mysqli_num_rows($select_coupon_name) > 0){
-      $message[] = 'coupon name already added';
+      #$message[] = 'coupon name already added';
+      echo '<script>alert("優惠券已新增!")</script>';
    }else{
       $add_coupon_query = mysqli_query($conn, "INSERT INTO `discount`(coupon_id, amount) VALUES('$coupon_id', '$amount')") or die('query failed');
    }
