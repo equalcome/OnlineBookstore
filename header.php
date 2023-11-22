@@ -21,7 +21,7 @@ if(isset($message)){
             <a href="#" class="fab fa-instagram"></a>
             <a href="#" class="fab fa-linkedin"></a>
          </div>
-         <p><b> 我要 <a href="login.php">登入</a> | <a href="register.php">註冊</a>  </b></p>
+         <!--<p><b> 我要 <a href="login.php">登入</a> | <a href="register.php">註冊</a>  </b></p>-->
       </div>
    </div>
 
