@@ -47,10 +47,12 @@ if (isset($_POST['order_btn'])) {
    $order_query = mysqli_query($conn, "SELECT * FROM orders WHERE name = '$name' AND number = '$number' AND email = '$email' AND method = '$method' AND shipping_method = '$shipping_method' AND address = '$address' AND total_products = '$total_products' AND total_price = '$cart_total'") or die('query failed');
 
    if ($cart_total == 0) {
-      $message[] = '購物車是空的';
+      echo '<script>alert("購物車是空的!")</script>';
+      #$message[] = '購物車是空的';
    } else {
       if (mysqli_num_rows($order_query) > 0) {
-         $message[] = '訂單已加入';
+         #$message[] = '訂單已加入';
+         echo '<script>alert("訂單已加入!")</script>';
          $coupon_code = isset($_POST['coupon_code']) ? $_POST['coupon_code'] : '';
       } else {
          $discounted_price = $cart_total; // Default discounted price is the same as the cart total
