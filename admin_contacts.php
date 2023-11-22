@@ -16,6 +16,16 @@ if(isset($_GET['delete'])){
    header('location:admin_contacts.php');
 }
 
+
+if(isset($_POST['update_message'])){
+
+   $message_update_id = $_POST['message_id'];
+   $update_message = $_POST['update_contact'];
+   mysqli_query($conn, "UPDATE `message` SET status = '$update_message' WHERE id = '$message_update_id'") or die('query failed');
+   echo '<script>alert("訊息狀態已更新!")</script>';
+
+}
+
 ?>
 
 <!DOCTYPE html>
@@ -54,7 +64,35 @@ if(isset($_GET['delete'])){
       <p> 號碼 : <span><?php echo $fetch_message['number']; ?></span> </p>
       <p> email : <span><?php echo $fetch_message['email']; ?></span> </p>
       <p> 訊息 : <span><?php echo $fetch_message['message']; ?></span> </p>
-      <a href="admin_contacts.php?delete=<?php echo $fetch_message['id']; ?>" onclick="return confirm('delete this message?');" class="delete-btn">刪除此訊息</a>
+      
+      <form action="" method="post">
+            <input type="hidden" name="message_id" value="<?php echo $fetch_message['id']; ?>">
+            <select name="update_contact">
+               <option value="" selected disabled><?php echo $fetch_message['status']; ?></option>
+               <option value="尚未回覆">尚未回覆</option>
+               <option value="已經回覆">已經回覆</option>
+            </select>
+            <input type="submit" value="更新" name="update_message" class="option-btn">
+      <a href="admin_contacts.php?delete=<?php echo $fetch_message['id']; ?>" onclick="return confirm('刪除訊息?');" class="delete-btn">刪除此訊息</a>
+      </form>
+      <style>
+         .messages .box-container .box form {
+            text-align: center;
+          /* 臨時的紅色邊框 */
+         }
+         
+         .messages .box-container .box form select{
+            border-radius: .5rem;
+            margin:.5rem 0;
+            width: 100%;
+            background-color: var(--light-bg);
+            border:var(--border);
+            padding:1.2rem 1.4rem;
+            font-size: 1.8rem;
+            color:var(--black);
+         }
+         </style>
+
    </div>
    <?php
       };
