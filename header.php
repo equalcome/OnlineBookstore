@@ -10,9 +10,7 @@ if(isset($message)){
    }
 }
 ?>
-
 <header class="header">
-
    <div class="header-1">
       <div class="flex">
          <div class="share">
@@ -27,14 +25,13 @@ if(isset($message)){
 
    <div class="header-2">
       <div class="flex">
-         <a href="home.php" class="logo"><b> 交大書局</b></a>
+         <a href="home.php" class="logo"><b> 書和恩書局</b></a>
 
          <nav class="navbar">
             <a href="home.php"><b>首頁</b></a>
             <a href="about.php"><b>關於我們</b></a>
             <a href="shop.php"><b>商品總覽</b></a>
             <a href="contact.php"><b>聯絡我們</b></a>
-            <a href="orders.php"><b>訂單管理</b></a>
          </nav>
 
          <div class="icons">
@@ -51,10 +48,12 @@ if(isset($message)){
          <div class="user-box">
             <p>使用者： <span><?php echo $_SESSION['user_name']; ?></span></p>
             <p>email : <span><?php echo $_SESSION['user_email']; ?></span></p>
-            <a href="edit.php" class="white-btn">edit</a>
-            <a href="logout.php" class="delete-btn">logout</a>
+            <div style="display: inline-block;">
+               <a href="edit.php" class="white-btn">編輯</a>
+               <a href="logout.php" class="delete-btn">登出</a>
+               <a href="orders.php" class="btn btn-primary">訂單管理</a> 
+            </div>
          </div>
       </div>
    </div>
-
 </header>

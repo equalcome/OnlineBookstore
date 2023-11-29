@@ -22,7 +22,7 @@
          <h3>聯絡我們</h3>
          <p> <i class="fas fa-phone"></i> 0900000000 </p>
          <p> <i class="fas fa-envelope"></i> lksvskjk@gmail.com </p>
-         <p> <i class="fas fa-map-marker-alt"></i> 新竹市東區大學路1001號 </p>
+         <p> <i class="fas fa-map-marker-alt"></i> 320桃園市中壢區中大路300號 </p>
       </div>
 
       <div class="box">

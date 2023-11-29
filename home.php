@@ -42,7 +42,7 @@ if(isset($_POST['add_to_cart'])){
    <meta charset="UTF-8">
    <meta http-equiv="X-UA-Compatible" content="IE=edge">
    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-   <title>交大書局</title>
+   <title>書和恩書局</title>
 
    <!-- font awesome cdn link  -->
    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
@@ -58,7 +58,7 @@ if(isset($_POST['add_to_cart'])){
 <section class="home">
 
    <div class="content">
-      <h3>歡迎光臨交大書局</h3>
+      <h3>歡迎光臨書和恩書局</h3>
       <p>閱讀與生活的無盡想像 精明下單浪漫生活</p>
       <a href="about.php" class="white-btn">了解更多</a>
    </div>

@@ -8,21 +8,18 @@ if(isset($_POST['submit'])){
    $email = mysqli_real_escape_string($conn, $_POST['email']);
    $pass = mysqli_real_escape_string($conn, md5($_POST['password']));
    $cpass = mysqli_real_escape_string($conn, md5($_POST['cpassword']));
-   $user_type = $_POST['user_type'];
+   $user_type = 'user';
 
    $select_users = mysqli_query($conn, "SELECT * FROM `users` WHERE email = '$email' AND password = '$pass'") or die('query failed');
 
    if(mysqli_num_rows($select_users) > 0){
-      #$message[] = 'user already exist!';
-      echo '<script>alert("已經註冊了")</script>';
+      $message[] = 'user already exist!';
    }else{
       if($pass != $cpass){
-         #$message[] = 'confirm password not matched!';
-         echo '<script>alert("密碼錯誤")</script>';
+         $message[] = 'confirm password not matched!';
       }else{
          mysqli_query($conn, "INSERT INTO `users`(name, email, password, user_type) VALUES('$name', '$email', '$cpass', '$user_type')") or die('query failed');
-         #$message[] = 'registered successfully!';
-         echo '<script>alert("註冊成功")</script>';
+         $message[] = 'registered successfully!';
          header('location:login.php');
       }
    }
@@ -71,10 +68,10 @@ if(isset($message)){
       <input type="email" name="email" placeholder="請輸入email" required class="box">
       <input type="password" name="password" placeholder="請輸入密碼" required class="box">
       <input type="password" name="cpassword" placeholder="確認密碼" required class="box">
-      <select name="user_type" class="box">
+      <!-- <select name="user_type" class="box">
          <option value="user">user</option>
          <option value="admin">admin</option>
-      </select>
+      </select> -->
       <input type="submit" name="submit" value="立刻註冊" class="btn">
       <p>已經有帳號了 <a href="login.php">登入</a></p>
    </form>

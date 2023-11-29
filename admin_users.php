@@ -34,7 +34,7 @@ if (isset($_GET['set_vip'])) {
    <meta http-equiv="X-UA-Compatible" content="IE=edge">
    <meta name="viewport" content="width=device-width, initial-scale=1.0">
    <title>users</title>
-
+   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
    <!-- font awesome cdn link  -->
    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 
@@ -52,7 +52,7 @@ if (isset($_GET['set_vip'])) {
 
    <div class="box-container">
       <?php
-      $select_users = mysqli_query($conn, "SELECT * FROM `users`") or die('query failed');
+      $select_users = mysqli_query($conn, "SELECT * FROM `users`WHERE user_type = 'user'") or die('query failed');
       while ($fetch_users = mysqli_fetch_assoc($select_users)) {
          ?>
          <div class="box">
@@ -70,15 +70,25 @@ if (isset($_GET['set_vip'])) {
                echo '<p> VIP : <span style="color: var(--red);">否</span></p>';
             }
             ?>
+            
+            <div style="text-align: center; margin-top: 20px; margin-bottom: 20px;">
+            <a href="admin_order_id.php?user_id=<?php echo $fetch_users['id']; ?>" class="btn btn-primary">訂單查詢</a>
+            </div>
+            
+            
             <a href="admin_users.php?delete=<?php echo $fetch_users['id']; ?>" onclick="return confirm('delete this user?');" class="delete-btn">刪除該使用者</a>
+            <div>
             <?php
             // 顯示VIP設定按鈕
             if ($fetch_users['is_vip'] == 0) {
-               echo '<a href="admin_users.php?set_vip=' . $fetch_users['id'] . '" class="vip-btn">設為VIP</a>';
-            } else {
-               echo '<a href="#" class="vip-btn disabled">已是VIP</a>';
-            }
+               // If the user is not a VIP, generate a link/button to set them as a VIP
+               echo '<a href="admin_users.php?set_vip=' . $fetch_users['id'] . '" class="btn btn-warning vip-btn">設為VIP</a>';
+           } else {
+               // If the user is already a VIP, generate a disabled link/button indicating so
+               echo '<a href="#" class="btn btn-success vip-btn disabled">已是VIP</a>';
+           }
             ?>
+            </div>
          </div>
       <?php
       };
