@@ -73,7 +73,7 @@ if(isset($_POST['update_product'])){
    <form action="" method="post" enctype="multipart/form-data">
       <h3>新增折扣券</h3>
       <input type="text" name="coupon_id" class="box" placeholder="輸入折扣券名稱" required>
-      <input type="number" min="0" name="amount" class="box" placeholder="輸入折扣(打幾折)" required>
+      <input type="number" min="0" name="amount" class="box" placeholder="輸入折扣(打幾折%數)" required>
       <input type="submit" min="0" value="新增折扣券" name="add_coupon" class="btn">
    </form>
 </section>

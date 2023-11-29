@@ -29,6 +29,15 @@ if (isset($_POST['order_btn'])) {
    $address = mysqli_real_escape_string($conn, '  ' . $_POST['street'] .  '  ' . $_POST['pin_code']);
    $placed_on = date('d-M-Y');
 
+   // 如果選擇的是 "到店取貨" 或 "超商取貨"，則不需要填寫地址
+   if ($shipping_method != '到店取貨' && $shipping_method != '超商取貨') {
+      $address = mysqli_real_escape_string($conn, '  ' . $_POST['street'] . ' ' . $_POST['city'] . ' ' . $_POST['country'] . '  ' . $_POST['pin_code']);
+      $readonlyAttribute = ''; // 如果需要輸入地址，則設定唯讀屬性為空
+  } else {
+      $address = ''; // 選擇 "到店取貨" 或 "超商取貨" 時，地址為空
+      $readonlyAttribute = 'readonly'; // 如果不需要輸入地址，則設定唯讀屬性
+  }
+
    
    $cart_total = 0;
    $cart_products = [];
@@ -58,27 +67,13 @@ if (isset($_POST['order_btn'])) {
          $discounted_price = $cart_total; // Default discounted price is the same as the cart total
    
          $coupon_code = isset($_POST['coupon_code']) ? $_POST['coupon_code'] : '';
-         if ($coupon_code === 'COUPON123') {
-            // Apply a 20% discount for the coupon code 'COUPON123'
-            $discount_percentage = 20;
-            $discount = $cart_total * ($discount_percentage / 100);
-            $discounted_price = $cart_total - $discount;
-         } elseif ($coupon_code === 'COUPON456') {
-            // Apply a 30% discount for the coupon code 'COUPON456'
-            $discount_percentage = 30;
-            $discount = $cart_total * ($discount_percentage / 100);
-            $discounted_price = $cart_total - $discount;
-         } elseif ($coupon_code === 'COUPON789') {
-            // Apply a 40% discount for the coupon code 'COUPON789'
-            $discount_percentage = 40;
-            $discount = $cart_total * ($discount_percentage / 100);
-            $discounted_price = $cart_total - $discount;
-         } else {
-            // No valid coupon code entered
-            $discounted_price = $cart_total;
-         }
+         $order_query = mysqli_query($conn, "SELECT * FROM discount");
       }
    }
+
+   //  ********************11/29周世哲*****************
+   $discounted_price = $_POST['discounted_price'];
+
    if($is_vip==1){
       $discounted_price = $cart_total; // Default discounted price is the same as the cart total
       $discounted_price=floor(0.9*$discounted_price);
@@ -158,11 +153,6 @@ if (isset($_POST['order_btn'])) {
       }  
 
       // Apply coupon code discount if applicable 
-      
-     
-      
-      
-      
       $_SESSION["checkout_discounted_total"] = $discounted_total;
 
       // Display the appropriate total amount to the user
@@ -186,7 +176,10 @@ if (isset($_POST['order_btn'])) {
    </section>
 
    <section class="checkout">
+      <!-- 改 -->
       <form action="" method="post">
+         <!-- ********************這是新的****************** -->
+         <input type="hidden" value="" name="discounted_price" id="discounted_price"> 
          <h3>您的訂單</h3>
          <div class="flex">
             <div class="inputBox">
@@ -201,14 +194,18 @@ if (isset($_POST['order_btn'])) {
                <span>email :<span class="required-field-text" style="color:#CB8A90; font-size: 6px;"> *此為必填</span></span>
                <input type="email" name="email" required placeholder="輸入email">
             </div>
+
+            
             <div class="inputBox">
                <span>運送方式 :</span>
-               <select name="shipping_method">
+               <select name="shipping_method" onchange="handleShippingMethodChange(this)">
                   <option value="到店取貨">到店取貨</option>
                   <option value="超商取貨">超商取貨</option>
                   <option value="宅配到府">宅配到府</option>
                </select>
             </div>
+
+
             <div class="inputBox">
                <span>付款方式 :</span>
                <select name="method">
@@ -218,9 +215,11 @@ if (isset($_POST['order_btn'])) {
                </select>
             </div>
             <div class="inputBox">
-               <span>住址 :<span class="required-field-text" style="color:#CB8A90; font-size: 6px;"> *此為必填</span></span>
-            <input type="text" name="street" required placeholder="請輸入地址">
+               <span>住址 :<span class="required-field-text" style="color:#CB8A90; font-size: 6px;"> *如果選宅配到府必填</span></span>
+            <input id="street" type="text" name="street" placeholder="請輸入地址" disabled>
          </div>
+         
+         
          <div class="inputBox">
             <span>郵遞區號 :<span class="required-field-text" style="color:#CB8A90; font-size: 6px;"> *此為必填</span></span>
             <input type="number" min="0" name="pin_code" required placeholder="e.g. 114">
@@ -236,33 +235,52 @@ if (isset($_POST['order_btn'])) {
    </form>
 
    <script>
+      function handleShippingMethodChange(selectElement) {
+        // 取得選擇的值
+        console.log(selectElement.value);
+        var selectedValue = selectElement.value;
+        var inputElement = document.getElementById("street");
+         if(selectElement.value == "宅配到府"){
+            inputElement.disabled = false;
+         }else{
+            inputElement.disabled = true;
+            inputElement.value = '';
+         }
+        // 在這裡執行你想要的操作
+
+        // 你可以在這裡呼叫其他 JavaScript 函數或執行其他操作
+    }
+      
+
+      // 當"apply_coupon"按鈕被點擊時，執行以下JavaScript程式碼
       document.getElementById("apply_coupon").addEventListener("click", function() {
-         var couponCode = document.getElementById("coupon_code").value;
-         if (couponCode === "COUPON123") {
-            var grandTotal = <?php echo $grand_total; ?>;
-            var discountPercentage = 20;
-            var discount = grandTotal * (discountPercentage / 100);
-            var discountedTotal = grandTotal - discount;
-            document.getElementById("total_amount").innerHTML = "Total Amount: <span class='original-price'>$" + grandTotal + "/-</span> <span class='discounted-price'>$" + discountedTotal + "/-</span>";
-         }
+         
+         // 從 HTML 中取得優惠碼
+         var couponCode = document.getElementById("coupon_code").value; 
+         <?php 
+            // 從資料庫中獲取所有優惠資訊
+            $order_query = mysqli_query($conn, "SELECT * FROM discount"); 
+            // 透過 PHP 處理每個資料庫中的優惠資訊
+            foreach($order_query as $row){
+         ?>
+                // 如果輸入的優惠碼與資料庫中的某個優惠碼匹配
+                if(couponCode == "<?php echo $row['coupon_id'];?>"){ 
+                        // 從 PHP 變數中獲取總金額
+                        var grandTotal = <?php echo $grand_total; ?>;
+                        // 定義折扣百分比
+                        var discountPercentage = 20;
+                        // 計算折扣金額
+                        var discount = grandTotal * (<?php echo $row['amount'];?> / 100);
+                        var discountedTotal = grandTotal - discount;
+                        // ********************這是新的********************
+                        document.getElementById('discounted_price').value = discountedTotal;
+                        // 更新 HTML 元素，顯示總金額和折扣後的金額
+                        document.getElementById("total_amount").innerHTML = "Total Amount: <span class='original-price'>$" + grandTotal + "/-</span> <span class='discounted-price'>$" + discountedTotal + "/-</span>";
+                }
 
-      else   if (couponCode === "COUPON456") {
-            var grandTotal = <?php echo $grand_total; ?>;
-            var discountPercentage = 30;
-            var discount = grandTotal * (discountPercentage / 100);
-            var discountedTotal = grandTotal - discount;
-            document.getElementById("total_amount").innerHTML = "Total Amount: <span class='original-price'>$" + grandTotal + "/-</span> <span class='discounted-price'>$" + discountedTotal + "/-</span>";
-         }
-
-       else  if (couponCode === "COUPON789") {
-            var grandTotal = <?php echo $grand_total; ?>;
-            var discountPercentage = 40;
-            var discount = grandTotal * (discountPercentage / 100);
-            var discountedTotal = grandTotal - discount;
-            document.getElementById("total_amount").innerHTML = "Total Amount: <span class='original-price'>$" + grandTotal + "/-</span> <span class='discounted-price'>$" + discountedTotal + "/-</span>";
-         } else {
-            document.getElementById("total_amount").innerHTML = "Total Amount: $" + <?php echo $grand_total; ?> + "/-";
-         }
+         <?php
+        }
+         ?>
       });
    </script>
 </section>
