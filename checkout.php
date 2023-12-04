@@ -48,6 +48,11 @@ if (isset($_POST['order_btn'])) {
          $cart_products[] = $cart_item['name'] . ' (' . $cart_item['quantity'] . ') ';
          $sub_total = ($cart_item['price'] * $cart_item['quantity']);
          $cart_total += $sub_total;
+
+          // 更新商品庫存
+          $product_name = $cart_item['name'];
+          $quantity = $cart_item['quantity'];
+          mysqli_query($conn, "UPDATE products SET inventory = inventory - '$quantity' WHERE name = '$product_name'") or die('update inventory query failed');
       }
    }
 
