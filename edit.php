@@ -35,7 +35,7 @@ if(isset($_POST['update_users'])){
 
    <!-- custom css file link  -->
    <link rel="stylesheet" href="css/style.css">
-
+   <link rel="icon" href="images/favicon.ico" />
 </head>
 <body>
    

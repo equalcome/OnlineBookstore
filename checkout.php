@@ -101,7 +101,7 @@ if (isset($_POST['order_btn'])) {
 
    <!-- custom css file link  -->
    <link rel="stylesheet" href="css/style.css">
-
+   <link rel="icon" href="images/favicon.ico" />
    <style>
       .btn {
          background-color: blueviolet;

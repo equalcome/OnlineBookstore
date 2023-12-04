@@ -40,7 +40,7 @@ if(isset($_GET['delete'])){
 
    <!-- custom admin css file link  -->
    <link rel="stylesheet" href="css/admin_style.css">
-
+   <link rel="icon" href="images/favicon.ico" />
 </head>
 <body>
    
@@ -65,6 +65,7 @@ if(isset($_GET['delete'])){
          <p> 地址 : <span><?php echo $fetch_orders['address']; ?></span> </p>
          <p> 商品總覽 : <span><?php echo $fetch_orders['total_products']; ?></span> </p>
          <p> 金額 : <span>$<?php echo $fetch_orders['total_price']; ?>/-</span> </p>
+         <p> 折扣後金額 : <span>$<?php echo $fetch_orders['discounted_price']; ?>/-</span> </p> <!-- 新增這一行 -->
          <p> 付款方式 : <span><?php echo $fetch_orders['method']; ?></span> </p>
          <p> 運送方式 : <span><?php echo $fetch_orders['shipping_method']; ?></span> </p>
          <form action="" method="post">
@@ -81,21 +82,12 @@ if(isset($_GET['delete'])){
       <?php
          }
       }else{
-         echo '<p class="empty">no orders placed yet!</p>';
+         echo '<p class="empty">尚未下訂單！</p>';
       }
       ?>
    </div>
 
 </section>
-
-
-
-
-
-
-
-
-
 
 <!-- custom admin js file link  -->
 <script src="js/admin_script.js"></script>

@@ -4,7 +4,6 @@ include 'config.php';
 session_start();
 
 $user_id = $_SESSION['user_id'];
-#$orders_id = $_SESSION['id'];
 
 if(!isset($user_id)){
    header('location:login.php');
@@ -30,7 +29,7 @@ if(isset($_GET['delete'])){
 
    <!-- custom css file link  -->
    <link rel="stylesheet" href="css/style.css">
-
+   <link rel="icon" href="images/favicon.ico" />
 </head>
 <body>
    
@@ -49,10 +48,6 @@ if(isset($_GET['delete'])){
 
       <?php
 
-
-// ...
-
-        
          $orders_query = mysqli_query($conn, "SELECT * FROM orders WHERE user_id = '$user_id'") or die('query failed');
          if(mysqli_num_rows($orders_query) > 0){
             while($fetch_orders = mysqli_fetch_assoc($orders_query)){
@@ -64,16 +59,13 @@ if(isset($_GET['delete'])){
          <p> email : <span><?php echo $fetch_orders['email']; ?></span> </p>
          <p> 地址 <span><?php echo $fetch_orders['address']; ?></span> </p>
          <p> 付款方式 <span><?php echo $fetch_orders['method']; ?></span> </p>
-         <p> 折扣代碼 <span><?php echo $fetch_orders['method']; ?></span> </p>
+         <p> 折扣代碼 <span><?php echo $fetch_orders['discount_code']; ?></span> </p>
          <p> 運送方式 <span><?php echo $fetch_orders['shipping_method']; ?></span> </p>
          <p> 你的訂單<span><?php echo $fetch_orders['total_products']; ?></span> </p>
-         <p> 總金額 <span>$<?php echo $fetch_orders['discounted_price']; ?></span> </p>
-         <p> 付款狀態 <span style="color:<?php if($fetch_orders['payment_status'] == 'pending'){ echo 'red'; }else{ echo 'green'; } ?>;"><?php echo $fetch_orders['payment_status']; ?></span> </p>
+         <p> 總金額 <span>$<?php echo !empty($fetch_orders['discounted_price']) ? $fetch_orders['discounted_price'] : $fetch_orders['total_price']; ?></span> </p>
+         <p> 付款狀態 <span style="color:<?php echo $fetch_orders['payment_status'] == 'pending' ? 'red' : 'green'; ?>"><?php echo $fetch_orders['payment_status']; ?></span> </p>
          <a href="orders.php?delete=<?php echo $fetch_orders['id']; ?>" onclick="return confirm('確認刪除訂單?');" class="delete-btn">刪除</a>
-         </div>
-     
-
-
+      </div>
 
       <?php
        }
@@ -84,13 +76,6 @@ if(isset($_GET['delete'])){
    </div>
 
 </section>
-
-
-
-
-
-
-
 
 <?php include 'footer.php'; ?>
 

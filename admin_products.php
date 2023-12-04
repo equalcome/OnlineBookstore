@@ -111,7 +111,7 @@ if(isset($_POST['update_product'])){
 
    <!-- custom admin css file link  -->
    <link rel="stylesheet" href="css/admin_style.css">
-
+   <link rel="icon" href="images/favicon.ico" />
 </head>
 <body>
    

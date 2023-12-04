@@ -18,14 +18,14 @@ if(!isset($admin_id)){
    <meta charset="UTF-8">
    <meta http-equiv="X-UA-Compatible" content="IE=edge">
    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-   <title>admin panel</title>
+   <title>管理員面板</title>
 
    <!-- font awesome cdn link  -->
    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 
    <!-- custom admin css file link  -->
    <link rel="stylesheet" href="css/admin_style.css">
-
+   <link rel="icon" href="images/favicon.ico" />
 </head>
 <body>
    
@@ -36,7 +36,6 @@ if(!isset($admin_id)){
       <a href="admin_page.php" class="logo"><b>管理<span>後台</span></b></a>
 
       <nav class="navbar">
-         <!-- <a href="admin_page.php"><b>首頁</b></a> -->
          <a href="admin_products.php"><b>產品總覽</b></a>
          <a href="admin_orders.php"><b>訂單管理</b></a>
          <a href="admin_users.php"><b>使用者</b></a>
@@ -50,10 +49,10 @@ if(!isset($admin_id)){
       </div>
 
       <div class="account-box">
-         <p>username : <span><?php echo $_SESSION['admin_name']; ?></span></p>
-         <p>email : <span><?php echo $_SESSION['admin_email']; ?></span></p>
-         <a href="logout.php" class="delete-btn">logout</a>
-         <div>new <a href="login.php">login</a> | <a href="register.php">register</a></div>
+         <p>使用者名稱 : <span><?php echo $_SESSION['admin_name']; ?></span></p>
+         <p>電子郵件 : <span><?php echo $_SESSION['admin_email']; ?></span></p>
+         <a href="logout.php" class="delete-btn">登出</a>
+         <div>新的 <a href="login.php">登入</a> | <a href="register.php">註冊</a></div>
       </div>
 
    </div>
@@ -68,31 +67,33 @@ if(!isset($admin_id)){
 
    <div class="box-container">
 
+      <!-- 修改總待付款金額的程式碼 -->
       <div class="box">
          <?php
             $total_pendings = 0;
-            $select_pending = mysqli_query($conn, "SELECT total_price FROM `orders` WHERE payment_status = '待付款'") or die('query failed');
+            $select_pending = mysqli_query($conn, "SELECT total_price, discounted_price FROM `orders` WHERE payment_status = '待付款'") or die('query failed');
             if(mysqli_num_rows($select_pending) > 0){
                while($fetch_pendings = mysqli_fetch_assoc($select_pending)){
-                  $total_price = $fetch_pendings['total_price'];
+                  $total_price = $fetch_pendings['discounted_price'] > 0 ? $fetch_pendings['discounted_price'] : $fetch_pendings['total_price'];
                   $total_pendings += $total_price;
-               };
-            };
+               }
+            }
          ?>
          <h3>$<?php echo $total_pendings; ?></h3>
          <p>所有待付款金額</p>
       </div>
 
+      <!-- 修改總已成交金額的程式碼 -->
       <div class="box">
          <?php
             $total_completed = 0;
-            $select_completed = mysqli_query($conn, "SELECT total_price FROM `orders` WHERE payment_status = '完成付款'") or die('query failed');
+            $select_completed = mysqli_query($conn, "SELECT total_price, discounted_price FROM `orders` WHERE payment_status = '完成付款'") or die('query failed');
             if(mysqli_num_rows($select_completed) > 0){
                while($fetch_completed = mysqli_fetch_assoc($select_completed)){
-                  $total_price = $fetch_completed['total_price'];
+                  $total_price = $fetch_completed['discounted_price'] > 0 ? $fetch_completed['discounted_price'] : $fetch_completed['total_price'];
                   $total_completed += $total_price;
-               };
-            };
+               }
+            }
          ?>
          <h3>$<?php echo $total_completed; ?></h3>
          <p>已成交金額</p>
@@ -157,14 +158,6 @@ if(!isset($admin_id)){
 </section>
 
 <!-- admin dashboard section ends -->
-
-
-
-
-
-
-
-
 
 <!-- custom admin js file link  -->
 <script src="js/admin_script.js"></script>
