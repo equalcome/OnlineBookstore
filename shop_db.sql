@@ -71,7 +71,7 @@ CREATE TABLE `orders` (
   `total_products` varchar(1000) NOT NULL,
   `total_price` int(100) NOT NULL,
   `placed_on` varchar(50) NOT NULL,
-  `payment_status` varchar(20) NOT NULL DEFAULT 'pending'
+  `payment_status` varchar(20) NOT NULL DEFAULT '待付款'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
