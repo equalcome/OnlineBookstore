@@ -14,7 +14,16 @@ if(isset($_POST['submit'])){
 
       $row = mysqli_fetch_assoc($select_users);
 
-      if($row['user_type'] == 'admin'){
+      if($row['user_type'] == 'superadmin'){
+
+         $_SESSION['admin_name'] = $row['name'];
+         $_SESSION['admin_email'] = $row['email'];
+         $_SESSION['admin_id'] = $row['id'];
+         $_SESSION['admin_type'] = $row['user_type'];
+         header('location:admin_page.php');
+
+
+      }elseif($row['user_type'] == 'admin'){
 
          $_SESSION['admin_name'] = $row['name'];
          $_SESSION['admin_email'] = $row['email'];

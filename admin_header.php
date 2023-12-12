@@ -2,15 +2,16 @@
 // 在你的PHP文件的顶部，添加会话开始的代码
 session_start();
 
-// 模拟用户数据，假设用户ID为2有权限
-$allowedUserIds = [2];
+// 假设你的用户数据包含了用户类型字段 admin_type
+// 模拟用户数据，假设用户类型为 "superadmin" 有权限
+$allowedUserType = "superadmin";
 
 // 检查用户是否登录
 if(isset($_SESSION['admin_id'])){
-    $currentUserId = $_SESSION['admin_id'];
+    $currentUserType = $_SESSION['admin_type'];
 
-    // 检查用户ID是否在允许的ID数组中
-    if(in_array($currentUserId, $allowedUserIds)){
+    // 检查用户类型是否为允许的类型
+    if($currentUserType === $allowedUserType){
         // 用户有权限，显示链接
         $isAdminLinkVisible = true;
     } else {
@@ -43,7 +44,7 @@ if(isset($_SESSION['admin_id'])){
             <a href="admin_users.php"><b>使用者</b></a>
             
             <?php
-            // 根据权限决定是否显示"管理者"链接
+            // 根据用户类型决定是否显示"管理者"链接
             if($isAdminLinkVisible) {
                 echo '<a href="admin_admins.php"><b>管理者</b></a>';
             }
